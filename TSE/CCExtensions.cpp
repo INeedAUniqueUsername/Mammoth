@@ -2933,6 +2933,7 @@ static PRIMITIVEPROCDEF g_Extensions[] =
 			"   x                  Type (generic)\n"
 			"   y                  SystemType\n"
 			"   z                  SystemMap\n"
+			"   @                  GenomeType\n"
 			"   $                  EconomyType\n"
 			"\n"
 			"   V                  Include virtual types\n"

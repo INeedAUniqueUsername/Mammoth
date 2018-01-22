@@ -86,9 +86,13 @@ enum DesignTypes
 	designImageComposite =				23,
 	designSound =						24,
 
-	designCount	=						25, 
+	designGenomeType =					25,
+
+	designCount	=						26, 
 
 	designSetAll =						0xffffffff,
+
+	charGenomeType =					'@',
 	charEconomyType =					'$',
 	charAdventureDesc =					'a',
 	charItemTable =						'b',
@@ -666,6 +670,7 @@ class CGenericType : public CDesignType
 #include "TSEPower.h"
 #include "TSESpaceEnvironment.h"
 #include "TSEMissionType.h"
+#include "TSEGenomeType.h"
 
 //	Adventures -----------------------------------------------------------------
 

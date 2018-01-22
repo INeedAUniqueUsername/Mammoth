@@ -17,6 +17,7 @@
 #define ENCOUNTER_TABLE_TAG						CONSTLIT("EncounterTable")
 #define ENCOUNTER_TYPE_TAG						CONSTLIT("EncounterType")
 #define EVENTS_TAG								CONSTLIT("Events")
+#define GENOME_TYPE_TAG							CONSTLIT("GenomeType")
 #define GLOBAL_DATA_TAG							CONSTLIT("GlobalData")
 #define IMAGE_TAG								CONSTLIT("Image")
 #define IMAGE_COMPOSITE_TAG						CONSTLIT("ImageComposite")
@@ -137,6 +138,8 @@ static char DESIGN_CHAR[designCount] =
 		'_',
 		'x',
 		'o',
+
+		'@',
 	};
 
 static char *DESIGN_CLASS_NAME[designCount] =
@@ -167,6 +170,8 @@ static char *DESIGN_CLASS_NAME[designCount] =
 		"TemplateType",
 		"Type",
 		"ImageComposite",
+
+		"GenomeType",
 	};
 
 static char *CACHED_EVENTS[CDesignType::evtCount] =
@@ -430,55 +435,7 @@ ALERROR CDesignType::CreateFromXML (SDesignLoadCtx &Ctx, CXMLElement *pDesc, CDe
 		ALERROR error;
 		CDesignType *pType = NULL;
 		bool bOverride = false;
-
-		if (strEquals(pDesc->GetTag(), ITEM_TYPE_TAG))
-			pType = new CItemType;
-		else if (strEquals(pDesc->GetTag(), ITEM_TABLE_TAG))
-			pType = new CItemTable;
-		else if (strEquals(pDesc->GetTag(), SHIP_CLASS_TAG))
-			pType = new CShipClass;
-		else if (strEquals(pDesc->GetTag(), SHIP_ENERGY_FIELD_TYPE_TAG))
-			pType = new COverlayType;
-		else if (strEquals(pDesc->GetTag(), MISSION_TYPE_TAG))
-			pType = new CMissionType;
-		else if (strEquals(pDesc->GetTag(), OVERLAY_TYPE_TAG))
-			pType = new COverlayType;
-		else if (strEquals(pDesc->GetTag(), SYSTEM_TYPE_TAG))
-			pType = new CSystemType;
-		else if (strEquals(pDesc->GetTag(), STATION_TYPE_TAG)
-				|| strEquals(pDesc->GetTag(), ENCOUNTER_TYPE_TAG))
-			pType = new CStationType;
-		else if (strEquals(pDesc->GetTag(), SOUNDTRACK_TAG))
-			pType = new CMusicResource;
-		else if (strEquals(pDesc->GetTag(), SOVEREIGN_TAG))
-			pType = new CSovereign;
-		else if (strEquals(pDesc->GetTag(), DOCK_SCREEN_TAG))
-			pType = new CDockScreenType;
-		else if (strEquals(pDesc->GetTag(), POWER_TAG))
-			pType = new CPower;
-		else if (strEquals(pDesc->GetTag(), SPACE_ENVIRONMENT_TYPE_TAG))
-			pType = new CSpaceEnvironmentType;
-		else if (strEquals(pDesc->GetTag(), ENCOUNTER_TABLE_TAG))
-			pType = new CShipTable;
-		else if (strEquals(pDesc->GetTag(), SHIP_TABLE_TAG))
-			pType = new CShipTable;
-		else if (strEquals(pDesc->GetTag(), SOUND_TAG))
-			pType = new CSoundResource;
-		else if (strEquals(pDesc->GetTag(), SYSTEM_FRAGMENT_TABLE_TAG))
-			pType = new CSystemTable;
-		else if (strEquals(pDesc->GetTag(), SYSTEM_MAP_TAG))
-			pType = new CSystemMap;
-		else if (strEquals(pDesc->GetTag(), IMAGE_TAG))
-			pType = new CObjectImage;
-		else if (strEquals(pDesc->GetTag(), ECONOMY_TYPE_TAG))
-			pType = new CEconomyType;
-		else if (strEquals(pDesc->GetTag(), TEMPLATE_TYPE_TAG))
-			pType = new CTemplateType;
-		else if (strEquals(pDesc->GetTag(), TYPE_TAG))
-			pType = new CGenericType;
-		else if (strEquals(pDesc->GetTag(), IMAGE_COMPOSITE_TAG))
-			pType = new CCompositeImageType;
-		else if (strEquals(pDesc->GetTag(), ADVENTURE_DESC_TAG))
+		if (strEquals(pDesc->GetTag(), ADVENTURE_DESC_TAG))
 			{
 			//	Only valid if we are inside an Adventure
 
@@ -490,6 +447,10 @@ ALERROR CDesignType::CreateFromXML (SDesignLoadCtx &Ctx, CXMLElement *pDesc, CDe
 
 			pType = new CAdventureDesc;
 			}
+		else if (strEquals(pDesc->GetTag(), DOCK_SCREEN_TAG))
+			pType = new CDockScreenType;
+		else if (strEquals(pDesc->GetTag(), ECONOMY_TYPE_TAG))
+			pType = new CEconomyType;
 		else if (strEquals(pDesc->GetTag(), EFFECT_TAG))
 			{
 			//	Load UNID
@@ -522,11 +483,56 @@ ALERROR CDesignType::CreateFromXML (SDesignLoadCtx &Ctx, CXMLElement *pDesc, CDe
 			if (error = CEffectCreator::CreateTypeFromXML(Ctx, pDesc, (CEffectCreator **)&pType))
 				return error;
 			}
+		else if (strEquals(pDesc->GetTag(), ENCOUNTER_TABLE_TAG))
+			pType = new CShipTable;
+		else if (strEquals(pDesc->GetTag(), GENOME_TYPE_TAG))
+			pType = new CGenomeType;
+		else if (strEquals(pDesc->GetTag(), IMAGE_TAG))
+			pType = new CObjectImage;
+		else if (strEquals(pDesc->GetTag(), IMAGE_COMPOSITE_TAG))
+			pType = new CCompositeImageType;
+		else if (strEquals(pDesc->GetTag(), ITEM_TABLE_TAG))
+			pType = new CItemTable;
+		else if (strEquals(pDesc->GetTag(), ITEM_TYPE_TAG))
+			pType = new CItemType;
+		else if (strEquals(pDesc->GetTag(), MISSION_TYPE_TAG))
+			pType = new CMissionType;
+		else if (strEquals(pDesc->GetTag(), OVERLAY_TYPE_TAG))
+			pType = new COverlayType;
+		else if (strEquals(pDesc->GetTag(), POWER_TAG))
+			pType = new CPower;
+		else if (strEquals(pDesc->GetTag(), SHIP_CLASS_TAG))
+			pType = new CShipClass;
 		else if (strEquals(pDesc->GetTag(), SHIP_CLASS_OVERRIDE_TAG))
 			{
 			pType = new CShipClass;
 			bOverride = true;
 			}
+		else if (strEquals(pDesc->GetTag(), SHIP_ENERGY_FIELD_TYPE_TAG))
+			pType = new COverlayType;
+		else if (strEquals(pDesc->GetTag(), SHIP_TABLE_TAG))
+			pType = new CShipTable;
+		else if (strEquals(pDesc->GetTag(), SOUNDTRACK_TAG))
+			pType = new CMusicResource;
+		else if (strEquals(pDesc->GetTag(), SOUND_TAG))
+			pType = new CSoundResource;
+		else if (strEquals(pDesc->GetTag(), SOVEREIGN_TAG))
+			pType = new CSovereign;
+		else if (strEquals(pDesc->GetTag(), SPACE_ENVIRONMENT_TYPE_TAG))
+			pType = new CSpaceEnvironmentType;
+		else if (strEquals(pDesc->GetTag(), STATION_TYPE_TAG)
+				|| strEquals(pDesc->GetTag(), ENCOUNTER_TYPE_TAG))
+			pType = new CStationType;
+		else if (strEquals(pDesc->GetTag(), SYSTEM_TYPE_TAG))
+			pType = new CSystemType;
+		else if (strEquals(pDesc->GetTag(), SYSTEM_FRAGMENT_TABLE_TAG))
+			pType = new CSystemTable;
+		else if (strEquals(pDesc->GetTag(), SYSTEM_MAP_TAG))
+			pType = new CSystemMap;
+		else if (strEquals(pDesc->GetTag(), TEMPLATE_TYPE_TAG))
+			pType = new CTemplateType;
+		else if (strEquals(pDesc->GetTag(), TYPE_TAG))
+			pType = new CGenericType;
 		else
 			{
 			Ctx.sError = strPatternSubst(CONSTLIT("Unknown design element: <%s>"), pDesc->GetTag());
