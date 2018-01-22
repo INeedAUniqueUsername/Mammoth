@@ -141,6 +141,10 @@ CString CDesignTypeCriteria::AsString (void) const
 					case designImageComposite:
 						Output.WriteChar(charImageComposite);
 						break;
+
+					case designGenomeType:
+						Output.WriteChar(charGenomeType);
+						break;
 					}
 				}
 			}
@@ -252,6 +256,10 @@ ALERROR CDesignTypeCriteria::ParseCriteria (const CString &sCriteria, CDesignTyp
 
 			case charGenericType:
 				retCriteria->m_dwTypeSet |= (1 << designGenericType);
+				break;
+
+			case charGenomeType:
+				retCriteria->m_dwTypeSet |= (1 << designGenomeType);
 				break;
 
 			case charGlobals:

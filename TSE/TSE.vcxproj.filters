@@ -448,6 +448,9 @@
     <ClCompile Include="CExtensionCollection.cpp">
       <Filter>Source Files\DesignTypes</Filter>
     </ClCompile>
+	<ClCompile Include="CGenomeType.cpp">
+      <Filter>Source Files\DesignTypes</Filter>
+    </ClCompile>
     <ClCompile Include="CPower.cpp">
       <Filter>Source Files\DesignTypes</Filter>
     </ClCompile>
