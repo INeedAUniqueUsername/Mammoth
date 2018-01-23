@@ -139,6 +139,10 @@ const DWORD DEFAULT_ECONOMY_UNID =			0x00001017;	//	ecCreditEconomy
 const DWORD UNID_UNKNOWN_ENEMY =			0x00001018;	//	svUnknownEnemy
 const DWORD UNID_NEUTRAL_SOVEREIGN =		0x00001019;	//	svNeutral
 
+const DWORD UNID_UNKNOWN =					0x00001030;	//	geOther
+const DWORD UNID_HUMAN_MALE =				0x00001031;	//	geHumanMale
+const DWORD UNID_HUMAN_FEMALE =				0x00001032;	//	geHumanFemale
+
 const DWORD g_ShipWreckUNID =				0x00002001;	//	stShipwreck
 const DWORD FLOTSAM_UNID =					0x0000200E;	//	stFlotsam
 
@@ -252,7 +256,7 @@ enum FrequencyTypes
 
 //	Other types
 
-enum GenomeTypes
+enum DefaultGenomeTypes
 	{
 	genomeUnknown		= 0,
 	genomeHumanMale		= 1,

@@ -111,8 +111,7 @@ void CListSaveFilesTask::CreateFileEntry (CGameFile &GameFile, const CTimeDate &
 
 	CShipClass *pClass = g_pUniverse->FindShipClass(GameFile.GetPlayerShip());
 	CString sShipClass = (pClass ? pClass->GetNounPhrase(nounGeneric) : NULL_STR);
-	CString sGenome = strCapitalize(GetGenomeName(GameFile.GetPlayerGenome()));
-
+	CString sGenome = strCapitalize(g_pUniverse->FindGenomeType(GameFile.GetPlayerGenome())->GetName()); 
 	CString sState;
 	if (GameFile.IsEndGame())
 		sState = strPatternSubst(CONSTLIT("Ended the game in the %s System"), GameFile.GetSystemName());

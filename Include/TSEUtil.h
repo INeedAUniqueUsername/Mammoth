@@ -1574,7 +1574,7 @@ class CFormulaText
 //	Miscellaneous utility functions
 
 CString AppendModifiers (const CString &sModifierList1, const CString &sModifierList2);
-CString ComposePlayerNameString (const CString &sString, const CString &sPlayerName, int iGenome, ICCItem *pArgs = NULL);
+CString ComposePlayerNameString (const CString &sString, const CString &sPlayerName, DWORD dwGenome, ICCItem *pArgs = NULL);
 CString GetLoadStateString (ELoadStates iState);
 Metric GetScale (CXMLElement *pObj);
 bool HasModifier (const CString &sModifierList, const CString &sModifier);

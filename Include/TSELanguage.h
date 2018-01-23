@@ -122,7 +122,7 @@ class CLanguageDataBlock
 			};
 
 		inline void CleanUp (void) { DeleteAll(); }
-		ICCItem *ComposeCCItem (CCodeChain &CC, ICCItem *pValue, const CString &sPlayerName, GenomeTypes iPlayerGenome, ICCItem *pData) const;
+		ICCItem *ComposeCCItem (CCodeChain &CC, ICCItem *pValue, const CString &sPlayerName, DWORD dwPlayerGenome, ICCItem *pData) const;
 		ETranslateResult ComposeResult (ICCItem *pResult, ICCItem *pData, TArray<CString> *retText, CString *retsText, ICCItem **retpResult = NULL) const;
 		bool ComposeTextResult (ETranslateResult iResult, const TArray<CString> &List, CString *retsText) const;
 		void Copy (const CLanguageDataBlock &Src);

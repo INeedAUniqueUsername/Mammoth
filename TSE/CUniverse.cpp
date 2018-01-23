@@ -935,7 +935,7 @@ CTopologyNode *CUniverse::GetFirstTopologyNode (void)
 	return FindTopologyNode(sNodeID);
 	}
 
-GenomeTypes CUniverse::GetPlayerGenome (void) const
+DWORD CUniverse::GetPlayerGenome (void) const
 
 //	GetPlayerGenome
 //

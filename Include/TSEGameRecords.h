@@ -41,7 +41,7 @@ class CGameRecord
 		CString GetEndGameEpitaph (DWORD dwFlags = 0) const;
 		inline const CString &GetEndGameReason (void) const { return m_sEndGameReason; }
 		inline const CString &GetGameID (void) const { return m_sGameID; }
-		inline GenomeTypes GetPlayerGenome (void) const { return m_iGenome; }
+		inline DWORD GetPlayerGenome (void) const { return m_dwGenome; }
 		inline const CString &GetPlayerName (void) const { return m_sName; }
 		inline CString GetPlayTimeString (void) const { return m_Duration.Format(NULL_STR); }
 		inline int GetResurrectCount (void) const { return m_iResurrectCount; }
@@ -52,7 +52,6 @@ class CGameRecord
 		ALERROR InitFromXML (CXMLElement *pDesc);
 		inline bool IsDebug (void) const { return m_bDebugGame; }
 		inline bool IsRegistered (void) const { return m_bRegisteredGame; }
-		static GenomeTypes LoadGenome (const CString &sAttrib);
 		void SaveToJSON (CJSONValue *retOutput) const;
 		inline void SetAdventureUNID (DWORD dwUNID) { m_dwAdventure = dwUNID; }
 		inline void SetDebug (bool bDebug = true) { m_bDebugGame = bDebug; }
@@ -60,7 +59,7 @@ class CGameRecord
 		inline void SetEndGameReason (const CString &sReason) { m_sEndGameReason = sReason; }
 		inline void SetExtensions (const TArray<DWORD> &Extensions) { m_Extensions = Extensions; }
 		inline void SetGameID (const CString &sGameID) { m_sGameID = sGameID; }
-		inline void SetPlayerGenome (GenomeTypes iGenome) { m_iGenome = iGenome; }
+		inline void SetPlayerGenome (DWORD dwGenome) { m_dwGenome = dwGenome; }
 		inline void SetPlayerName (const CString &sName) { m_sName = sName; }
 		inline void SetPlayTime (const CTimeSpan &Time) { m_Duration = Time; }
 		inline void SetRegistered (bool bRegistered = true) { m_bRegisteredGame = bRegistered; }
@@ -79,7 +78,7 @@ class CGameRecord
 		TArray<DWORD> m_Extensions;				//	UNID of included extensions
 
 		CString m_sName;						//	Character name
-		GenomeTypes m_iGenome;					//	Character genome
+		DWORD m_dwGenome;						//	UNID of genome
 
 		DWORD m_dwShipClass;					//	Ship class UNID
 		CString m_sShipClass;					//	Ship class
