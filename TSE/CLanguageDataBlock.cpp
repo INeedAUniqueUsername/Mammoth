@@ -32,7 +32,7 @@ void CLanguageDataBlock::AddEntry (const CString &sID, const CString &sText)
 	pEntry->pCode = NULL;
 	}
 
-ICCItem *CLanguageDataBlock::ComposeCCItem (CCodeChain &CC, ICCItem *pValue, const CString &sPlayerName, GenomeTypes iPlayerGenome, ICCItem *pData) const
+ICCItem *CLanguageDataBlock::ComposeCCItem (CCodeChain &CC, ICCItem *pValue, const CString &sPlayerName, DWORD dwPlayerGenome, ICCItem *pData) const
 
 //	ComposeCCItem
 //
@@ -50,7 +50,7 @@ ICCItem *CLanguageDataBlock::ComposeCCItem (CCodeChain &CC, ICCItem *pValue, con
 		CCSymbolTable *pTable = (CCSymbolTable *)pResult;
 		for (i = 0; i < pValue->GetCount(); i++)
 			{
-			ICCItem *pElement = ComposeCCItem(CC, pSource->GetElement(i), sPlayerName, iPlayerGenome, pData);
+			ICCItem *pElement = ComposeCCItem(CC, pSource->GetElement(i), sPlayerName, dwPlayerGenome, pData);
 			ICCItem *pKey = CC.CreateString(pSource->GetKey(i));
 			pTable->AddEntry(&CC, pKey, pElement);
 			pElement->Discard(&CC);
@@ -61,7 +61,7 @@ ICCItem *CLanguageDataBlock::ComposeCCItem (CCodeChain &CC, ICCItem *pValue, con
 		}
 
 	else if (pValue->IsIdentifier())
-		return CC.CreateString(::ComposePlayerNameString(pValue->GetStringValue(), sPlayerName, iPlayerGenome, pData));
+		return CC.CreateString(::ComposePlayerNameString(pValue->GetStringValue(), sPlayerName, dwPlayerGenome, pData));
 
 	else if (pValue->IsList())
 		{
@@ -70,7 +70,7 @@ ICCItem *CLanguageDataBlock::ComposeCCItem (CCodeChain &CC, ICCItem *pValue, con
 		CCLinkedList *pList = (CCLinkedList *)(pResult);
 		for (i = 0; i < pValue->GetCount(); i++)
 			{
-			ICCItem *pElement = ComposeCCItem(CC, pValue->GetElement(i), sPlayerName, iPlayerGenome, pData);
+			ICCItem *pElement = ComposeCCItem(CC, pValue->GetElement(i), sPlayerName, dwPlayerGenome, pData);
 			pList->Append(CC, pElement);
 			pElement->Discard(&CC);
 			}
@@ -116,13 +116,13 @@ CLanguageDataBlock::ETranslateResult CLanguageDataBlock::ComposeResult (ICCItem 
 		if (retText)
 			{
 			CString sPlayerName = g_pUniverse->GetPlayerName();
-			GenomeTypes iPlayerGenome = g_pUniverse->GetPlayerGenome();
+			DWORD dwPlayerGenome = g_pUniverse->GetPlayerGenome();
 
 			retText->DeleteAll();
 
 			retText->InsertEmpty(pResult->GetCount());
 			for (i = 0; i < pResult->GetCount(); i++)
-				retText->GetAt(i) = ::ComposePlayerNameString(pResult->GetElement(i)->GetStringValue(), sPlayerName, iPlayerGenome, pData);
+				retText->GetAt(i) = ::ComposePlayerNameString(pResult->GetElement(i)->GetStringValue(), sPlayerName, dwPlayerGenome, pData);
 
 			return resultArray;
 			}
@@ -708,7 +708,7 @@ bool CLanguageDataBlock::Translate (CSpaceObject *pObj, const CString &sID, ICCI
 		case resultCCItem:
 			{
 			CString sPlayerName = g_pUniverse->GetPlayerName();
-			GenomeTypes iPlayerGenome = g_pUniverse->GetPlayerGenome();
+			DWORD iPlayerGenome = g_pUniverse->GetPlayerGenome();
 
 			*retpResult = ComposeCCItem(g_pUniverse->GetCC(), pResult, sPlayerName, iPlayerGenome, pData);
 			pResult->Discard(&g_pUniverse->GetCC());

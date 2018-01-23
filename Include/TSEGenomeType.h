@@ -35,8 +35,8 @@ class CGenomeType : public CDesignType
 		virtual ICCItem *OnGetProperty (CCodeChainCtx &Ctx, const CString &sProperty) const override;
 
 	private:
-		CString m_sName;							//		humanMale, humanFemale, etc
-		CString m_sSpecies;							//		Human, etc
+		CString m_sName;							//		Human Male, Human Female, etc
+		CString m_sSpecies;							//		Human, Ringer, etc
 		CString m_sGender;							//		male, female, etc
 		CString m_sSubject;							//		%he%				he, she, etc (matching case)
 		CString m_sDeterminer;						//		%his%				his, her, etc (matching case)

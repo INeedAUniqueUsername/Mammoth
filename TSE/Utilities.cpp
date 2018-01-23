@@ -198,21 +198,6 @@ static char *g_pszMessageID[] =
 
 #define MESSAGE_ID_COUNT			(sizeof(g_pszMessageID) / sizeof(g_pszMessageID[0]))
 
-struct SGenomeData
-	{
-	char *pszID;
-	char *pszName;
-	};
-
-static SGenomeData g_Genome[] =
-	{
-		{	"",		""	},						//	genomeUnknown
-		{	"humanMale",	"human male"	},	//	genomeMale
-		{	"humanFemale",	"human female"	},	//	genomeFemale
-	};
-
-#define GENOME_COUNT				(sizeof(g_Genome) / sizeof(g_Genome[0]))
-
 static char *LOAD_STATE_STRINGS[] =
 	{
 	"Unknown",
@@ -840,7 +825,7 @@ CString ComposeDamageAdjReference (int *AdjRow, int *StdRow)
 	return sResult;
 	}
 
-CString ComposePlayerNameString (const CString &sString, const CString &sPlayerName, int iGenome, ICCItem *pArgs)
+CString ComposePlayerNameString (const CString &sString, const CString &sPlayerName, DWORD dwGenome, ICCItem *pArgs)
 
 //	ComposePlayerNameString
 //
@@ -854,9 +839,12 @@ CString ComposePlayerNameString (const CString &sString, const CString &sPlayerN
 //		%sir%				sir or ma'am (matching case)
 //		%man%				man or woman (matching case)
 //		%brother%			brother or sister (matching case)
+//		%son%				son or daughter (matching case)
 //		%%					%
 
 	{
+	CGenomeType *pGenome = g_pUniverse->FindGenomeType(dwGenome);
+	
 	//	Prepare output
 
 	CString sOutput;
@@ -922,59 +910,35 @@ CString ComposePlayerNameString (const CString &sString, const CString &sPlayerN
 				sVar = sPlayerName;
 			else if (strEquals(sVar, CONSTLIT("he")))
 				{
-				if (iGenome == genomeHumanMale)
-					sVar = CONSTLIT("he");
-				else
-					sVar = CONSTLIT("she");
+				sVar = pGenome->GetSubject();
 				}
 			else if (strEquals(sVar, CONSTLIT("sir")))
 				{
-				if (iGenome == genomeHumanMale)
-					sVar = CONSTLIT("sir");
-				else
-					sVar = CONSTLIT("ma'am");
+				sVar = pGenome->GetAddress();
 				}
 			else if (strEquals(sVar, CONSTLIT("man")))
 				{
-				if (iGenome == genomeHumanMale)
-					sVar = CONSTLIT("man");
-				else
-					sVar = CONSTLIT("woman");
+				sVar = pGenome->GetPerson();
 				}
 			else if (strEquals(sVar, CONSTLIT("his")))
 				{
-				if (iGenome == genomeHumanMale)
-					sVar = CONSTLIT("his");
-				else
-					sVar = CONSTLIT("her");
+				sVar = pGenome->GetDeterminer();
 				}
 			else if (strEquals(sVar, CONSTLIT("him")))
 				{
-				if (iGenome == genomeHumanMale)
-					sVar = CONSTLIT("him");
-				else
-					sVar = CONSTLIT("her");
+				sVar = pGenome->GetObject();
 				}
 			else if (strEquals(sVar, CONSTLIT("hers")))
 				{
-				if (iGenome == genomeHumanMale)
-					sVar = CONSTLIT("his");
-				else
-					sVar = CONSTLIT("hers");
+				sVar = pGenome->GetPossessive();
 				}
 			else if (strEquals(sVar, CONSTLIT("brother")))
 				{
-				if (iGenome == genomeHumanMale)
-					sVar = CONSTLIT("brother");
-				else
-					sVar = CONSTLIT("sister");
+				sVar = pGenome->GetSibling();
 				}
 			else if (strEquals(sVar, CONSTLIT("son")))
 				{
-				if (iGenome == genomeHumanMale)
-					sVar = CONSTLIT("son");
-				else
-					sVar = CONSTLIT("daughter");
+				sVar = pGenome->GetChild();
 				}
 
 			//	If we still haven't found it, then assume this is an index into 
@@ -1673,30 +1637,24 @@ int GetFrequencyByLevel (const CString &sLevelFrequency, int iLevel)
 		}
 	}
 
-CString GetGenomeID (GenomeTypes iGenome)
+CString GetGenomeID (DWORD dwGenome)
 
 //	GetGenomeID
 //
-//	Returns the genome id
+//	Returns the ID from a genome
 
 	{
-	if ((int)iGenome < 0 || (int)iGenome >= GENOME_COUNT)
-		return NULL_STR;
-
-	return CString(g_Genome[iGenome].pszID);
-	}
-
-CString GetGenomeName (GenomeTypes iGenome)
-
-//	GetGenomeName
-//
-//	Returns the genome name
-
-	{
-	if ((int)iGenome < 0 || (int)iGenome >= GENOME_COUNT)
-		return NULL_STR;
-
-	return CString(g_Genome[iGenome].pszName);
+	switch(dwGenome)
+		{
+		case genomeUnknown:
+			return "unknown";
+		case genomeHumanMale:
+			return "humanMale";
+		case genomeHumanFemale:
+			return "humanFemale";
+		default:
+			return g_pUniverse->FindGenomeType(dwGenome)->GetName();
+		}
 	}
 
 Metric GetScale (CXMLElement *pObj)
@@ -2675,21 +2633,32 @@ Metric ParseDistance (const CString &sValue, Metric rDefaultScale)
 		return 0.0;
 	}
 
-GenomeTypes ParseGenomeID (const CString &sText)
+DWORD ParseGenomeID (const CString &sText)
 
 //	ParseGenomeID
 //
 //	Returns the genome from an ID
 
 	{
-	int i;
-
-	for (i = 0; i < GENOME_COUNT; i++)
-		if (strEquals(sText, CString(g_Genome[i].pszID)))
-			return (GenomeTypes)i;
-
-	return genomeUnknown;
+	if (strEquals(sText, "humanMale"))
+		return genomeHumanMale;
+	else if (strEquals(sText, "humanFemale"))
+		return genomeHumanFemale;
+	if (strEquals(sText, "unknown"))
+		return genomeUnknown;
+	int iIndex = 0;
+	CGenomeType *pNewGenomeType;
+	do
+		{
+		iIndex++;
+		pNewGenomeType = g_pUniverse->GetGenomeType(iIndex);
+		} while ((iIndex + 1) < g_pUniverse->GetGenomeTypeCount() && (pNewGenomeType->IsVirtual() || !strEquals(pNewGenomeType->GetName(), sText)));
+		if (strEquals(pNewGenomeType->GetName(), sText))
+			return pNewGenomeType->GetUNID();
+		else
+			return genomeUnknown;
 	}
+
 
 void ParseIntegerList (const CString &sList, DWORD dwFlags, TArray<int> *retList)
 

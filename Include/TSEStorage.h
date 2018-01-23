@@ -29,7 +29,7 @@ class CGameFile
 		inline CString GetEpitaph (void) const { return CString((char *)m_Header.szEpitaph); }
 		inline CString GetFilespec (void) const { return m_pFile->GetFilename(); }
 		inline CString GetGameID (void) { return CString(m_Header.szGameID); }
-		inline GenomeTypes GetPlayerGenome (void) const { return (GenomeTypes)m_Header.dwGenome; }
+		inline DWORD GetPlayerGenome (void) const { return (DWORD)m_Header.dwGenome; }
 		CString GetPlayerName (void) const;
 		inline DWORD GetPlayerShip (void) const { return m_Header.dwPlayerShip; }
 		inline int GetResurrectCount (void) { return m_Header.dwResurrectCount; }

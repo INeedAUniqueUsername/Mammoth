@@ -145,7 +145,7 @@ class IPlayerController
 
 		virtual ICCItem *CreateGlobalRef (CCodeChain &CC) { return CC.CreateInteger((int)this); }
         virtual CPlayerGameStats *GetGameStats (void) const { return NULL; }
-		virtual GenomeTypes GetGenome (void) const { return genomeUnknown; }
+		virtual DWORD GetGenome (void) const { return genomeUnknown; }
 		virtual CString GetName (void) const { return NULL_STR; }
 		virtual bool GetPropertyInteger (const CString &sProperty, int *retiValue) { return false; }
 		virtual bool GetPropertyItemList (const CString &sProperty, CItemList *retItemList) { return false; }

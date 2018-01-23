@@ -2070,9 +2070,8 @@ CString GetDamageResultsName (EDamageResults iResult);
 DestructionTypes GetDestructionCause (const CString &sString);
 CString GetDestructionName (DestructionTypes iCause);
 
-CString GetGenomeID (GenomeTypes iGenome);
-CString GetGenomeName (GenomeTypes iGenome);
-GenomeTypes ParseGenomeID (const CString &sText);
+CString GetGenomeID(DWORD dwGenome);
+DWORD ParseGenomeID(const CString &sText);
 
 CString GetPaintLayerID (CSystem::LayerEnum iPaintLayer);
 CSystem::LayerEnum ParsePaintLayerID (const CString &sID);

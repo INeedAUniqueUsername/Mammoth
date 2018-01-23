@@ -352,6 +352,22 @@ class CUniverse
 		inline CShipTable *FindEncounterTable (DWORD dwUNID) { return CShipTable::AsType(m_Design.FindEntry(dwUNID)); }
 		bool FindExtension (DWORD dwUNID, DWORD dwRelease, CExtension **retpExtension = NULL) { return m_Extensions.FindBestExtension(dwUNID, dwRelease, (InDebugMode() ? CExtensionCollection::FLAG_DEBUG_MODE : 0), retpExtension); }
 		inline CGenericType *FindGenericType (DWORD dwUNID) { return CGenericType::AsType(m_Design.FindEntry(dwUNID)); }
+		inline CGenomeType *FindGenomeType(DWORD dwUNID)
+			{
+			switch (dwUNID)
+				{
+				//	Check for legacy genome identifiers
+				case genomeUnknown:
+					return g_pUniverse->FindGenomeType(UNID_UNKNOWN);
+				case genomeHumanMale:
+					return g_pUniverse->FindGenomeType(UNID_HUMAN_MALE);
+				case genomeHumanFemale:
+					return g_pUniverse->FindGenomeType(UNID_HUMAN_FEMALE);
+
+				default:
+					return CGenomeType::AsType(m_Design.FindEntry(dwUNID));
+				}
+			}
 		inline CItemTable *FindItemTable (DWORD dwUNID) { return CItemTable::AsType(m_Design.FindEntry(dwUNID)); }
 		inline CItemType *FindItemType (DWORD dwUNID) { return CItemType::AsType(m_Design.FindEntry(dwUNID)); }
 		inline CMissionType *FindMissionType (DWORD dwUNID) { return CMissionType::AsType(m_Design.FindEntry(dwUNID)); }
@@ -377,7 +393,7 @@ class CUniverse
 		inline int GetPaintTick (void) { return m_iPaintTick; }
 		inline CSpaceObject *GetPOV (void) const { return m_pPOV; }
 		inline IPlayerController *GetPlayer (void) const { return m_pPlayer; }
-		GenomeTypes GetPlayerGenome (void) const;
+		DWORD GetPlayerGenome (void) const;
 		CString GetPlayerName (void) const;
 		inline CSpaceObject *GetPlayerShip (void) const { return m_pPlayerShip; }
 		CSovereign *GetPlayerSovereign (void) const;
@@ -398,6 +414,8 @@ class CUniverse
 		inline int GetExtensionDescCount (void) { return m_Design.GetExtensionCount(); }
 		inline CItemType *GetItemType (int iIndex) { return (CItemType *)m_Design.GetEntry(designItemType, iIndex); }
 		inline int GetItemTypeCount (void) { return m_Design.GetCount(designItemType); }
+		inline CGenomeType *GetGenomeType(int iIndex) { return (CGenomeType *)m_Design.GetEntry(designGenomeType, iIndex); }
+		inline int GetGenomeTypeCount(void) { return m_Design.GetCount(designGenomeType); }
 		inline CPower *GetPower (int iIndex) { return (CPower *)m_Design.GetEntry(designPower, iIndex); }
 		inline int GetPowerCount (void) { return m_Design.GetCount(designPower); }
 		inline CShipClass *GetShipClass (int iIndex) { return (CShipClass *)m_Design.GetEntry(designShipClass, iIndex); }

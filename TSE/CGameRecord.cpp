@@ -37,7 +37,7 @@
 
 CGameRecord::CGameRecord (void) :
 		m_dwAdventure(0),
-		m_iGenome(genomeUnknown),
+		m_dwGenome(genomeUnknown),
 		m_dwShipClass(0),
 		m_bDebugGame(false),
 		m_iScore(0),
@@ -109,7 +109,7 @@ CString CGameRecord::GetDescription (DWORD dwParts) const
 
 		if (dwParts & descCharacter)
 			{
-			CString sLine = strPatternSubst(CONSTLIT("%s — %s"), m_sName, GetGenomeName(m_iGenome));
+			CString sLine = strPatternSubst(CONSTLIT("%s — %s"), m_sName, g_pUniverse->FindGenomeType(m_dwGenome)->GetName());
 			Output.Write(sLine.GetASCIIZPointer(), sLine.GetLength());
 
 			bDashNeeded = true;
@@ -224,7 +224,7 @@ ALERROR CGameRecord::InitFromJSON (const CJSONValue &Value)
 		m_Extensions[i] = Extensions.GetElement(i).AsInt32();
 
 	m_sName = Value.GetElement(FIELD_CHARACTER_NAME).AsString();
-	m_iGenome = ParseGenomeID(Value.GetElement(FIELD_CHARACTER_GENOME).AsString());
+	m_dwGenome = (DWORD)Value.GetElement(FIELD_CHARACTER_GENOME).AsInt32();
 
 	m_dwShipClass = (DWORD)Value.GetElement(FIELD_SHIP_CLASS).AsInt32();
 	m_sShipClass = Value.GetElement(FIELD_SHIP_CLASS_NAME).AsString();
@@ -254,7 +254,7 @@ ALERROR CGameRecord::InitFromXML (CXMLElement *pDesc)
 	m_sGameID = NULL_STR;
 	m_sName = pDesc->GetAttribute(NAME_ATTRIB);
 	m_sShipClass = pDesc->GetAttribute(SHIP_CLASS_ATTRIB);
-	m_iGenome = LoadGenome(pDesc->GetAttribute(GENOME_ATTRIB));
+	m_dwGenome = pDesc->GetAttributeInteger(GENOME_ATTRIB);
 	m_bDebugGame = (pDesc->GetAttributeInteger(DEBUG_ATTRIB) ? true : false);
 	m_dwAdventure = pDesc->GetAttributeInteger(ADVENTURE_ATTRIB);
 	if (m_dwAdventure == 0)
@@ -267,26 +267,6 @@ ALERROR CGameRecord::InitFromXML (CXMLElement *pDesc)
 	m_sEpitaph = pDesc->GetAttribute(EPITAPH_ATTRIB);
 
 	return NOERROR;
-	}
-
-GenomeTypes CGameRecord::LoadGenome (const CString &sAttrib)
-
-//	LoadGenome
-//
-//	Load genome value
-
-	{
-	int iGenome = strToInt(sAttrib, genomeUnknown, NULL);
-
-	switch (iGenome)
-		{
-		case genomeHumanMale:
-		case genomeHumanFemale:
-			return (GenomeTypes)iGenome;
-
-		default:
-			return genomeUnknown;
-		}
 	}
 
 void CGameRecord::SaveToJSON (CJSONValue *retOutput) const
@@ -316,7 +296,7 @@ void CGameRecord::SaveToJSON (CJSONValue *retOutput) const
 	retOutput->InsertHandoff(FIELD_EXTENSIONS, Extensions);
 
 	retOutput->InsertHandoff(FIELD_CHARACTER_NAME, CJSONValue(m_sName));
-	retOutput->InsertHandoff(FIELD_CHARACTER_GENOME, CJSONValue(GetGenomeID(m_iGenome)));
+	retOutput->InsertHandoff(FIELD_CHARACTER_GENOME, CJSONValue(GetGenomeID(m_dwGenome)));
 
 	retOutput->InsertHandoff(FIELD_SHIP_CLASS, CJSONValue((int)m_dwShipClass));
 	retOutput->InsertHandoff(FIELD_SHIP_CLASS_NAME, CJSONValue(m_sShipClass));
@@ -382,7 +362,7 @@ ALERROR CGameRecord::WriteToXML (IWriteStream &Stream)
 	CString sData = strPatternSubst(CONSTLIT("\t<Score name=\"%s\"\tshipClass=\"%s\"\tgenome=\"%d\"\tscore=\"%d\"\tepitaph=\"%s\"\ttime=\"%s\"\tresurrectCount=\"%d\"\tadventureUNID=\"%x\"\tdebug=\"%d\"/>\r\n"),
 			CXMLElement::MakeAttribute(m_sName),
 			CXMLElement::MakeAttribute(m_sShipClass),
-			m_iGenome,
+			m_dwGenome,
 			m_iScore,
 			CXMLElement::MakeAttribute(m_sEpitaph),
 			m_Duration.Encode(),
