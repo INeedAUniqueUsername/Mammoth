@@ -32,7 +32,7 @@ class CGenomeType : public CDesignType
 		//	CDesignType overrides
 		virtual ALERROR OnBindDesign (SDesignLoadCtx &Ctx) override;
 		virtual ALERROR OnCreateFromXML (SDesignLoadCtx &Ctx, CXMLElement *pDesc) override;
-		virtual ICCItem *OnGetProperty (CCodeChainCtx &Ctx, const CString &sProperty) const override;
+		virtual ICCItemPtr OnGetProperty (CCodeChainCtx &Ctx, const CString &sProperty) const override;
 
 	private:
 		CString m_sName;							//		Human Male, Human Female, etc

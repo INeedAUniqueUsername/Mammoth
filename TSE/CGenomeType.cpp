@@ -80,7 +80,7 @@ ALERROR CGenomeType::OnCreateFromXML (SDesignLoadCtx &Ctx, CXMLElement *pDesc)
 	return NOERROR;
 	}
 
-ICCItem *CGenomeType::OnGetProperty (CCodeChainCtx &Ctx, const CString &sProperty) const
+ICCItemPtr CGenomeType::OnGetProperty (CCodeChainCtx &Ctx, const CString &sProperty) const
 
 //	OnGetProperty
 //
@@ -90,27 +90,27 @@ ICCItem *CGenomeType::OnGetProperty (CCodeChainCtx &Ctx, const CString &sPropert
 	CCodeChain &CC = g_pUniverse->GetCC();
 
 	if (strEquals(sProperty, PROPERTY_NAME))
-		return CC.CreateString(m_sName);
+		return ICCItemPtr(CC.CreateString(m_sName));
 	else if (strEquals(sProperty, PROPERTY_SPECIES))
-		return CC.CreateString(m_sSpecies);
+		return ICCItemPtr(CC.CreateString(m_sSpecies));
 	else if (strEquals(sProperty, PROPERTY_GENDER))
-		return CC.CreateString(m_sGender);
+		return ICCItemPtr(CC.CreateString(m_sGender));
 	else if (strEquals(sProperty, PROPERTY_SUBJECT))
-		return CC.CreateString(m_sSubject);
+		return ICCItemPtr(CC.CreateString(m_sSubject));
 	else if (strEquals(sProperty, PROPERTY_DETERMINER))
-		return CC.CreateString(m_sDeterminer);
+		return ICCItemPtr(CC.CreateString(m_sDeterminer));
 	else if (strEquals(sProperty, PROPERTY_POSSESSIVE))
-		return CC.CreateString(m_sPossessive);
+		return ICCItemPtr(CC.CreateString(m_sPossessive));
 	else if (strEquals(sProperty, PROPERTY_OBJECT))
-		return CC.CreateString(m_sObject);
+		return ICCItemPtr(CC.CreateString(m_sObject));
 	else if (strEquals(sProperty, PROPERTY_ADDRESS))
-		return CC.CreateString(m_sAddress);
+		return ICCItemPtr(CC.CreateString(m_sAddress));
 	else if (strEquals(sProperty, PROPERTY_PERSON))
-		return CC.CreateString(m_sPerson);
+		return ICCItemPtr(CC.CreateString(m_sPerson));
 	else if (strEquals(sProperty, PROPERTY_SIBLING))
-		return CC.CreateString(m_sSibling);
+		return ICCItemPtr(CC.CreateString(m_sSibling));
 	else if (strEquals(sProperty, PROPERTY_CHILD))
-		return CC.CreateString(m_sChild);
+		return ICCItemPtr(CC.CreateString(m_sChild));
 	else
 		return NULL;
 	}
